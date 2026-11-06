@@ -6,14 +6,14 @@
 int remover_tarefa_por_id(ListaTarefas *lista, int id) {
     int posicao = 0;
 
-    // Percorre a lista contando a posição até achar o ID
+   
     for (No *no = primeiro_no(lista); no != NULL; no = proximo_no(no)) {
         if (dados_tarefa(no)->id == id) {
             return remover_posicao(lista, posicao);
         }
         posicao++;
     }
-    return 0;   // percorreu tudo e não achou
+    return 0;  
 }
 
 int marcar_como_feita(ListaTarefas *lista, int id) {
@@ -24,13 +24,13 @@ int marcar_como_feita(ListaTarefas *lista, int id) {
     return 1;
 }
 
-// Diz se a tarefa a deve ficar depois da tarefa b (então precisam trocar)
+
 static int deve_trocar(Tarefa *a, Tarefa *b, int criterio) {
     if (criterio == POR_PRAZO) return a->prazo > b->prazo;
     return a->dificuldade > b->dificuldade;
 }
 
-// Bubble Sort: a cada passada, a maior tarefa "sobe" para o fim da lista
+// Bubble Sort: 
 static void ordenar(ListaTarefas *lista, int criterio) {
     int n = tamanho_lista(lista);
 
@@ -41,7 +41,6 @@ static void ordenar(ListaTarefas *lista, int criterio) {
             No *proximo = proximo_no(atual);
 
             if (deve_trocar(dados_tarefa(atual), dados_tarefa(proximo), criterio)) {
-                // troca os dados dos dois nós (os nós ficam no mesmo lugar)
                 Tarefa auxiliar = *dados_tarefa(atual);
                 *dados_tarefa(atual) = *dados_tarefa(proximo);
                 *dados_tarefa(proximo) = auxiliar;
