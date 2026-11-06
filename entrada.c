@@ -7,7 +7,7 @@
 #include "entrada.h"
 
 void ler_texto(char *destino, int tamanho) {
-    // Se a entrada acabou (Ctrl+D), encerra para não ficar em loop infinito
+    
     if (fgets(destino, tamanho, stdin) == NULL) {
         printf("\nEntrada encerrada. Saindo...\n");
         exit(0);
@@ -17,7 +17,7 @@ void ler_texto(char *destino, int tamanho) {
     if (n > 0 && destino[n - 1] == '\n') {
         destino[n - 1] = '\0';
     } else {
-        // A linha era maior que o espaço disponível: joga o resto fora
+        
         int c;
         while ((c = getchar()) != '\n' && c != EOF) {
         }
