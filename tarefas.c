@@ -10,7 +10,7 @@ struct No {
 struct ListaTarefas {
     No *inicio;
     int tamanho;
-    int proximo_id;     // id que a próxima tarefa vai receber
+    int proximo_id;
 };
 
 ListaTarefas *criar_lista(void) {
