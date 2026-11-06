@@ -9,13 +9,6 @@
 #define DIFICULDADE_MAX 5
 #define LIMITE_PRAZO (30 * 24 * 60 * 60)    // 30 dias, em segundos
 
-/*
- * As funções pedir_... servem para o cadastro e para a edição.
- * Quando editando = 1, apertar Enter mantém o valor que já estava.
- * Elas repetem a pergunta até o usuário digitar algo válido.
- */
-
-// O título é válido se tiver pelo menos um caractere que não seja espaço
 static int titulo_valido(const char *titulo) {
     for (int i = 0; titulo[i] != '\0'; i++) {
         if (!isspace((unsigned char)titulo[i])) return 1;
@@ -47,7 +40,6 @@ static void pedir_descricao(char *descricao, int editando) {
     else          printf("Descrição (opcional): ");
     ler_texto(texto, sizeof texto);
 
-    // No cadastro a descrição pode ficar vazia; na edição vazio = manter
     if (!editando || texto[0] != '\0') {
         strcpy(descricao, texto);
     }
@@ -75,7 +67,6 @@ static void pedir_dificuldade(int *dificuldade, int editando) {
     }
 }
 
-// Monta o time_t a partir da data digitada. Retorna 0 se a data não existe.
 static int converter_data(int dia, int mes, int ano, int hora, int minuto, time_t *resultado) {
     struct tm data = {0};
     data.tm_mday = dia;
@@ -86,9 +77,7 @@ static int converter_data(int dia, int mes, int ano, int hora, int minuto, time_
     data.tm_isdst = -1;
 
     *resultado = mktime(&data);
-
-    // O mktime corrige datas impossíveis (31/02 vira 03/03).
-    // Se algum campo mudou, é porque a data digitada não existia.
+    
     if (data.tm_mday != dia || data.tm_mon != mes - 1 || data.tm_year != ano - 1900 ||
         data.tm_hour != hora || data.tm_min != minuto) {
         return 0;
@@ -141,7 +130,7 @@ void cadastrar_tarefa(ListaTarefas *lista) {
     pedir_prazo(&nova.prazo, 0);
     nova.status = STATUS_PENDENTE;
 
-    int id = inserir_fim(lista, nova);   // o id é definido dentro da lista
+    int id = inserir_fim(lista, nova);
     if (id == 0) {
         printf("\nErro: memória insuficiente.\n");
     } else {
@@ -171,7 +160,6 @@ void editar_tarefa(ListaTarefas *lista) {
     printf("  Dificuldade: %d\n", t->dificuldade);
     printf("(Aperte Enter para manter o valor atual)\n\n");
 
-    // Cada função altera direto a tarefa da lista
     pedir_titulo(t->titulo, 1);
     pedir_descricao(t->descricao, 1);
     pedir_prazo(&t->prazo, 1);
