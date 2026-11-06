@@ -1,0 +1,63 @@
+CODIGO PARA INJETAR TAREFAS DE EXEMPLO
+
+1. No topo da main.c, adicione este include (tarefas.h ja inclui time.h,
+   mas o include explicito deixa clara a dependencia deste trecho):
+
+#include <time.h>
+
+2. Coloque esta funcao antes de main():
+
+static int carregar_tarefas_exemplo(ListaTarefas *lista) {
+    time_t agora = time(NULL);
+    if (agora == (time_t)-1) {
+        fprintf(stderr, "Erro ao obter a data e hora atuais.\n");
+        return 0;
+    }
+
+    Tarefa exemplos[] = {
+        {
+            .titulo = "Estudar linguagem C",
+            .descricao = "Revisar listas encadeadas e ponteiros",
+            .prazo = agora + 24 * 60 * 60,
+            .dificuldade = 3,
+            .status = STATUS_PENDENTE
+        },
+        {
+            .titulo = "Finalizar trabalho",
+            .descricao = "Revisar e entregar o trabalho da faculdade",
+            .prazo = agora + 3 * 24 * 60 * 60,
+            .dificuldade = 5,
+            .status = STATUS_PENDENTE
+        },
+        {
+            .titulo = "Organizar materiais",
+            .descricao = "Separar arquivos e anotacoes",
+            .prazo = agora + 7 * 24 * 60 * 60,
+            .dificuldade = 1,
+            .status = STATUS_PENDENTE
+        }
+    };
+
+    int quantidade = (int)(sizeof exemplos / sizeof exemplos[0]);
+    for (int i = 0; i < quantidade; i++) {
+        if (inserir_fim(lista, exemplos[i]) == 0) {
+            fprintf(stderr, "Erro ao inserir tarefa de exemplo.\n");
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+3. Dentro de main(), chame a funcao logo depois de verificar se a lista
+   foi criada com sucesso:
+
+    if (!carregar_tarefas_exemplo(lista)) {
+        destruir_lista(lista);
+        return 1;
+    }
+
+As tarefas aparecem em toda execucao porque sao inseridas na memoria quando
+o programa inicia. Os prazos sao relativos ao momento da execucao: 1, 3 e
+7 dias a partir de agora. Os IDs sao atribuidos automaticamente por
+inserir_fim().
